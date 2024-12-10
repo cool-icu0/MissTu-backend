@@ -1,7 +1,4 @@
-package com.cool.tu.utils;
-
-import com.cool.tu.exception.BusinessException;
-import com.cool.tu.exception.ErrorCode;
+package com.cool.tu.exception;
 
 /**
  * 抛出工具
