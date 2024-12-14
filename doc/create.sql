@@ -1,4 +1,6 @@
+create database miss_tu;
 -- 用户表
+use miss_tu;
 create table if not exists user
 (
     id           bigint auto_increment comment 'id' primary key,
