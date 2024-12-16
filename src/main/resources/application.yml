@@ -34,9 +34,3 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.cool.tu.controller
-aliyun:
-  oss:
-    endpoint: oss-cn-beijing.aliyuncs.com
-    access-key: LTAI5t98GrZqxAXyrjqefiWo
-    secret-key: tchxpF5ZbTiV70gsds0520tlxwznO7
-    bucket-name: cool-miss-tu  #桶名
