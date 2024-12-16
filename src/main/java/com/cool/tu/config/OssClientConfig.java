@@ -1,7 +1,6 @@
 package com.cool.tu.config;
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClient;
 import com.aliyun.oss.OSSClientBuilder;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "aliyun.oss")
 @Data
-public class CosClientConfig {
+public class OssClientConfig {
   
     /**  
      * endpoint
