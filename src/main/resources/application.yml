@@ -1,4 +1,6 @@
 server:
+  multipart:
+    max-file-size: 10MB
   port: 8123
   servlet:
     context-path: /api
