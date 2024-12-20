@@ -10,6 +10,7 @@ import com.cool.tu.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.tu.model.entity.User;
 import com.cool.tu.model.vo.picture.PictureVO;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -66,4 +67,11 @@ public interface PictureService extends IService<Picture> {
      * @param loginUser
      */
     void fillReviewParams(Picture picture, User loginUser);
+
+    /**
+     * 删除图片文件
+     * @param oldPicture
+     */
+    @Async
+    void clearPictureFile(Picture oldPicture);
 }
