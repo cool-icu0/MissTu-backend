@@ -8,9 +8,6 @@ import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
 import com.cool.tu.exception.ThrowUtils;
 import com.cool.tu.model.dto.file.UploadPictureResult;
-import com.qcloud.cos.COSClient;
-import com.qcloud.cos.model.ObjectMetadata;
-import com.qcloud.cos.model.PutObjectRequest;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.model.ciModel.persistence.ImageInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +16,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+
+/**
+ * 文件服务
+ * @deprecated 已废弃，改为使用 upload 包的模板方法优化
+ */
+@Deprecated
 @Service
 @Slf4j
 public class FileManager {
