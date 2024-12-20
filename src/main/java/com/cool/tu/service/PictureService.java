@@ -2,16 +2,13 @@ package com.cool.tu.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.cool.tu.model.dto.picture.PictureQueryRequest;
-import com.cool.tu.model.dto.picture.PictureReviewRequest;
-import com.cool.tu.model.dto.picture.PictureUploadByBatchRequest;
-import com.cool.tu.model.dto.picture.PictureUploadRequest;
+import com.cool.tu.model.dto.picture.*;
 import com.cool.tu.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.tu.model.entity.User;
+import com.cool.tu.model.vo.picture.PictureTagCategory;
 import com.cool.tu.model.vo.picture.PictureVO;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -23,55 +20,137 @@ import javax.servlet.http.HttpServletRequest;
 public interface PictureService extends IService<Picture> {
 
     /**
+     * 校验图片
+     *
+     * @param picture 图片
+     */
+    void validPicture(Picture picture);
+
+    /**
      * 上传图片
      *
-     * @param inputSource
-     * @param pictureUploadRequest
-     * @param loginUser
-     * @return
+     * @param inputSource          文件输入源
+     * @param pictureUploadRequest 上传请求
+     * @param loginUser            登录用户
+     * @return 图片
      */
     PictureVO uploadPicture(Object inputSource,
                             PictureUploadRequest pictureUploadRequest,
                             User loginUser);
 
-    QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
+    /**
+     * 获取图片包装类（单条）
+     *
+     * @param picture 图片
+     * @param request 请求
+     * @return 图片包装类
+     */
+    PictureVO getPictureVO(Long id, HttpServletRequest request);
 
-    PictureVO getPictureVO(Picture picture, HttpServletRequest request);
-
+    /**
+     * 获取图片包装类（多条）
+     *
+     * @param picturePage 图片分页
+     * @param request     请求
+     * @return 图片包装类分页
+     */
     Page<PictureVO> getPictureVOPage(Page<Picture> picturePage, HttpServletRequest request);
 
-    void validPicture(Picture picture);
+    /**
+     * 获取查询对象
+     *
+     * @param pictureQueryRequest 查询请求
+     * @return 查询对象
+     */
+    QueryWrapper<Picture> getQueryWrapper(PictureQueryRequest pictureQueryRequest);
+
+    /**
+     * 图片审核
+     *
+     * @param pictureReviewRequest 图片审核请求
+     * @param loginUser            登录用户
+     */
+    void doPictureReview(PictureReviewRequest pictureReviewRequest, User loginUser);
+
+    /**
+     * 自动填充审核参数
+     *
+     * @param picture   图片
+     * @param loginUser 登录用户
+     */
+    void fillReviewParams(Picture picture, User loginUser);
 
     /**
      * 批量抓取和创建图片
      *
-     * @param pictureUploadByBatchRequest
-     * @param loginUser
+     * @param pictureUploadByBatchRequest 批量上传请求
+     * @param loginUser                   登录用户
      * @return 成功创建的图片数
      */
     Integer uploadPictureByBatch(PictureUploadByBatchRequest pictureUploadByBatchRequest, User loginUser);
 
     /**
-     * 图片审核
+     * 清理图片文件
      *
-     * @param pictureReviewRequest
-     * @param loginUser
-     */
-    void doPictureReview(PictureReviewRequest pictureReviewRequest, User loginUser);
-
-
-    /**
-     * 自动填充审核参数
-     *
-     * @param picture
-     * @param loginUser
-     */
-    void fillReviewParams(Picture picture, User loginUser);
-
-    /**
-     * 删除图片文件
-     * @param oldPicture
+     * @param oldPicture 旧图片
      */
     @Async
     void clearPictureFile(Picture oldPicture);
+
+    /**
+     * 删除图片
+     *
+     * @param pictureId 图片id
+     * @param loginUser 登录用户
+     */
+    void deletePicture(long pictureId, User loginUser);
+
+    /**
+     * 编辑图片
+     *
+     * @param pictureEditRequest 图片编辑请求
+     * @param loginUser          登录用户
+     */
+    void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
+
+    /**
+     * 校验空间图片的权限
+     *
+     * @param loginUser 登录用户
+     * @param picture   图片
+     */
+    void checkPictureAuth(User loginUser, Picture picture);
+
+    /**
+     * 更新图片
+     *
+     * @param pictureUpdateRequest 图片更新请求
+     * @param loginUser            登录用户
+     */
+    void updatePicture(PictureUpdateRequest pictureUpdateRequest, User loginUser);
+
+    /**
+     * 分页获取图片（封装类）
+     *
+     * @param pictureQueryRequest 图片查询请求
+     * @param request             请求
+     * @return 图片分页
+     */
+    Page<Picture> listPictureVOByPage(PictureQueryRequest pictureQueryRequest, HttpServletRequest request);
+
+    /**
+     * 获取图片标签分类
+     *
+     * @return 图片标签分类
+     */
+    PictureTagCategory listPictureTagCategory();
+
+    /**
+     * 分页获取图片（封装类）（缓存）
+     *
+     * @param pictureQueryRequest 图片查询请求
+     * @param request             请求
+     * @return 图片分页
+     */
+    Page<PictureVO> listPictureVOByPageWithCache(PictureQueryRequest pictureQueryRequest, HttpServletRequest request);
 }
