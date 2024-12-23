@@ -39,6 +39,7 @@ create table if not exists picture
     reviewerId    BIGINT                             NULL COMMENT '审核人 ID',
     reviewTime    DATETIME                           NULL COMMENT '审核时间',
     thumbnailUrl  varchar(512)                       NULL COMMENT '缩略图 url',
+    picColor      varchar(16)                        null comment '图片主色调',
     spaceId       bigint                             null comment '空间 id（为空表示公共空间）',
     createTime    datetime default CURRENT_TIMESTAMP not null comment '创建时间',
     editTime      datetime default CURRENT_TIMESTAMP not null comment '编辑时间',

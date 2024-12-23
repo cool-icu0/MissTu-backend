@@ -9,8 +9,10 @@ import com.cool.tu.model.entity.User;
 import com.cool.tu.model.vo.picture.PictureTagCategory;
 import com.cool.tu.model.vo.picture.PictureVO;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author Cool
@@ -41,7 +43,7 @@ public interface PictureService extends IService<Picture> {
     /**
      * 获取图片包装类（单条）
      *
-     * @param picture 图片
+     * @param id      图片id
      * @param request 请求
      * @return 图片包装类
      */
@@ -153,4 +155,24 @@ public interface PictureService extends IService<Picture> {
      * @return 图片分页
      */
     Page<PictureVO> listPictureVOByPageWithCache(PictureQueryRequest pictureQueryRequest, HttpServletRequest request);
+
+    /**
+     * 根据颜色搜索图片
+     *
+     * @param spaceId   空间id
+     * @param picColor  图片颜色
+     * @param loginUser 登录用户
+     * @return 图片列表
+     */
+    List<PictureVO> searchPictureByColor(Long spaceId, String picColor, User loginUser);
+
+    /**
+     * 批量编辑图片
+     *
+     * @param pictureEditByBatchRequest 批量编辑请求
+     * @param loginUser                 登录用户
+     */
+    @Transactional(rollbackFor = Exception.class)
+    void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
+
 }
