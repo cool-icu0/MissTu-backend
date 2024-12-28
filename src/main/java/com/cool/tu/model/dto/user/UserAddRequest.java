@@ -2,6 +2,7 @@ package com.cool.tu.model.dto.user;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @Data
@@ -32,5 +33,6 @@ public class UserAddRequest implements Serializable {
      */
     private String userRole;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

@@ -2,6 +2,7 @@ package com.cool.tu.model.dto.picture;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 // 图片上传请求
@@ -34,5 +35,6 @@ public class PictureUploadRequest implements Serializable {
     private String picColor;
 
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

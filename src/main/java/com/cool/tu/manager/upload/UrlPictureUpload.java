@@ -55,10 +55,14 @@ public class UrlPictureUpload extends PictureUploadTemplate {
                 final List<String> ALLOW_CONTENT_TYPES = Arrays.asList("image/jpeg", "image/jpg", "image/png", "image/webp");
                 ThrowUtils.throwIf(!ALLOW_CONTENT_TYPES.contains(contentType.toLowerCase()),
                         ErrorCode.PARAMS_ERROR, "文件类型错误");
-                if (!fileUrl.endsWith(".jpg") || !fileUrl.endsWith(".jpeg") || !fileUrl.endsWith(".png") || !fileUrl.endsWith(".webp")) {
-                    //判断后缀是否为contentType的后缀
-                    String contentTypeSuffix = contentType.substring(contentType.lastIndexOf("/") + 1);
-                    inputSource = fileUrl + "." + contentTypeSuffix;
+                if (!fileUrl.trim().isEmpty()) {
+                    String lowerCaseFileUrl = fileUrl.toLowerCase();
+                    // 后缀校验,如果后缀不为空，就校验后缀是否合法
+                    if (!lowerCaseFileUrl.matches(".*\\.(jpg|jpeg|png|webp)$")) {
+                        //判断后缀是否为contentType的后缀
+                        String contentTypeSuffix = contentType.substring(contentType.lastIndexOf("/") + 1);
+                        inputSource = fileUrl + "." + contentTypeSuffix;
+                    }
                 }
             }
             // 6. 文件存在，文件大小校验

@@ -2,8 +2,11 @@ package com.cool.tu.model.dto.picture;
 
 import lombok.Data;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Data
-public class PictureUploadByBatchRequest {
+public class PictureUploadByBatchRequest implements Serializable {
 
     /**
      * 搜索词
@@ -19,4 +22,7 @@ public class PictureUploadByBatchRequest {
      * 抓取数量
      */
     private Integer count = 10;
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 }

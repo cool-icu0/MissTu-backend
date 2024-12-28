@@ -2,6 +2,7 @@ package com.cool.tu.model.dto.picture;
 
 import lombok.Data;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.List;
 
@@ -33,5 +34,6 @@ public class PictureEditByBatchRequest implements Serializable {
      */
     private List<String> tags;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }

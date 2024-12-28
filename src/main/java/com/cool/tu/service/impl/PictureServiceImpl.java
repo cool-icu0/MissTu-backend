@@ -51,8 +51,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -195,6 +193,11 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             picture.setId(pictureId);
             picture.setEditTime(new Date());
         }
+        //设置默认值
+        picture.setIntroduction("暂无简介");
+        picture.setTags("[\"默认\"]");
+        picture.setCategory("批量");
+
         // 开启事务
         Long finalSpaceId = spaceId;
         transactionTemplate.execute(status -> {

@@ -4,6 +4,7 @@ import com.cool.tu.common.PageRequest;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serial;
 import java.io.Serializable;
 
 @EqualsAndHashCode(callSuper = true)
@@ -35,5 +36,6 @@ public class UserQueryRequest extends PageRequest implements Serializable {
      */
     private String userRole;
 
+    @Serial
     private static final long serialVersionUID = 1L;
 }
