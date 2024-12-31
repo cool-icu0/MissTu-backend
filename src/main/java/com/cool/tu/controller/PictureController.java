@@ -1,7 +1,10 @@
 package com.cool.tu.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.cool.tu.annotation.AuthCheck;
+import com.cool.tu.api.aliyunAI.model.CreateOutPaintingTaskResponse;
+import com.cool.tu.api.aliyunAI.model.GetOutPaintingTaskResponse;
 import com.cool.tu.api.imageSearch.ImageSearchApiFacade;
 import com.cool.tu.api.imageSearch.model.ImageSearchResult;
 import com.cool.tu.common.BaseResponse;
@@ -226,5 +229,33 @@ public class PictureController {
         User loginUser = userService.getLoginUser(request);
         pictureService.editPictureByBatch(pictureEditByBatchRequest, loginUser);
         return ResultUtils.success(true);
+    }
+
+    /**
+     * 创建 AI 扩图任务
+     */
+    @PostMapping("/out_painting/create_task")
+    public BaseResponse<CreateOutPaintingTaskResponse> createPictureOutPaintingTask(
+            @RequestBody CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest,
+            HttpServletRequest request) {
+
+        if (createPictureOutPaintingTaskRequest == null || createPictureOutPaintingTaskRequest.getPictureId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User loginUser = userService.getLoginUser(request);
+        CreateOutPaintingTaskResponse response = pictureService.createPictureOutPaintingTask(createPictureOutPaintingTaskRequest, loginUser);
+        return ResultUtils.success(response);
+    }
+
+    /**
+     * 查询 AI 扩图任务执行情况
+     */
+    @GetMapping("/out_painting/get_task")
+    public BaseResponse<GetOutPaintingTaskResponse> getPictureOutPaintingTask(String taskId) {
+        if (StrUtil.isBlank(taskId)) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        GetOutPaintingTaskResponse task = pictureService.getPictureOutPaintingTask(taskId);
+        return ResultUtils.success(task);
     }
 }

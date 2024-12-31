@@ -1,5 +1,6 @@
 package com.cool.tu.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -8,6 +9,10 @@ import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.cool.tu.api.aliyunAI.AliYunAiApi;
+import com.cool.tu.api.aliyunAI.model.CreateOutPaintingTaskRequest;
+import com.cool.tu.api.aliyunAI.model.CreateOutPaintingTaskResponse;
+import com.cool.tu.api.aliyunAI.model.GetOutPaintingTaskResponse;
 import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
 import com.cool.tu.exception.ThrowUtils;
@@ -88,6 +93,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
     @Resource
     private StringRedisTemplate stringRedisTemplate;
+
+    @Resource
+    private AliYunAiApi aliYunAiApi;
 
     /**
      * 上传图片
@@ -855,6 +863,43 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             log.error("名称解析错误", e);
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "名称解析错误");
         }
+    }
+
+    /**
+     * AI扩图，生成图片
+     * @param createPictureOutPaintingTaskRequest 请求
+     * @param loginUser 登录用户
+     * @return 任务信息
+     */
+    @Override
+    public CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser) {
+        // 获取图片信息
+        Long pictureId = createPictureOutPaintingTaskRequest.getPictureId();
+        Picture picture = Optional.ofNullable(this.getById(pictureId))
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
+        // 权限校验
+        checkPictureAuth(loginUser, picture);
+        // 构造请求参数
+        CreateOutPaintingTaskRequest taskRequest = new CreateOutPaintingTaskRequest();
+        CreateOutPaintingTaskRequest.Input input = new CreateOutPaintingTaskRequest.Input();
+        input.setImageUrl(picture.getUrl());
+        taskRequest.setInput(input);
+        BeanUtil.copyProperties(createPictureOutPaintingTaskRequest, taskRequest);
+        // 创建任务
+        return aliYunAiApi.createOutPaintingTask(taskRequest);
+    }
+
+    /**
+     * 查询 AI 扩图任务执行情况
+     *
+     * @param taskId 任务id
+     * @return 任务信息
+     */
+    @Override
+    public GetOutPaintingTaskResponse getPictureOutPaintingTask(String taskId) {
+        ThrowUtils.throwIf(StrUtil.isBlank(taskId), ErrorCode.PARAMS_ERROR);
+        GetOutPaintingTaskResponse task = aliYunAiApi.getOutPaintingTask(taskId);
+        return task;
     }
 }
 

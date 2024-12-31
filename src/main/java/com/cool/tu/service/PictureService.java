@@ -2,6 +2,8 @@ package com.cool.tu.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.cool.tu.api.aliyunAI.model.CreateOutPaintingTaskResponse;
+import com.cool.tu.api.aliyunAI.model.GetOutPaintingTaskResponse;
 import com.cool.tu.model.dto.picture.*;
 import com.cool.tu.model.entity.Picture;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -175,4 +177,20 @@ public interface PictureService extends IService<Picture> {
     @Transactional(rollbackFor = Exception.class)
     void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
 
+    /**
+     * AI扩图，生成图片
+     *
+     * @param createPictureOutPaintingTaskRequest 创建图片生成任务请求
+     * @param loginUser                           登录用户
+     * @return 生成任务响应
+     */
+    CreateOutPaintingTaskResponse createPictureOutPaintingTask(CreatePictureOutPaintingTaskRequest createPictureOutPaintingTaskRequest, User loginUser);
+
+    /**
+     * 查询 AI 扩图任务执行情况
+     *
+     * @param taskId 任务id
+     * @return 任务响应
+     */
+    GetOutPaintingTaskResponse getPictureOutPaintingTask(String taskId);
 }
