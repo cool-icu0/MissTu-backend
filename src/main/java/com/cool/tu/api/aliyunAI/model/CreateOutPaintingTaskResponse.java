@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
+/**
+ * 创建扩图任务响应类
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

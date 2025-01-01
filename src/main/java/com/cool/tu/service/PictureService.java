@@ -177,7 +177,7 @@ public interface PictureService extends IService<Picture> {
     @Transactional(rollbackFor = Exception.class)
     void editPictureByBatch(PictureEditByBatchRequest pictureEditByBatchRequest, User loginUser);
 
-/**
+    /**
      * AI扩图，生成图片
      *
      * @param createPictureOutPaintingTaskRequest 创建图片生成任务请求

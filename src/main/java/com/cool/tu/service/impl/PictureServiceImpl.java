@@ -877,17 +877,17 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 获取图片信息
         Long pictureId = createPictureOutPaintingTaskRequest.getPictureId();
         Picture picture = Optional.ofNullable(this.getById(pictureId))
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR));
-        // 权限校验
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR, "图片不存在"));
+        // 校验权限
         checkPictureAuth(loginUser, picture);
-        // 构造请求参数
-        CreateOutPaintingTaskRequest taskRequest = new CreateOutPaintingTaskRequest();
+        // 创建扩图任务
+        CreateOutPaintingTaskRequest createOutPaintingTaskRequest = new CreateOutPaintingTaskRequest();
         CreateOutPaintingTaskRequest.Input input = new CreateOutPaintingTaskRequest.Input();
         input.setImageUrl(picture.getUrl());
-        taskRequest.setInput(input);
-        BeanUtil.copyProperties(createPictureOutPaintingTaskRequest, taskRequest);
+        createOutPaintingTaskRequest.setInput(input);
+        createOutPaintingTaskRequest.setParameters(createPictureOutPaintingTaskRequest.getParameters());
         // 创建任务
-        return aliYunAiApi.createOutPaintingTask(taskRequest);
+        return aliYunAiApi.createOutPaintingTask(createOutPaintingTaskRequest);
     }
 
     /**
