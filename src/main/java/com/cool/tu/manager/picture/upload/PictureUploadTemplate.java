@@ -1,4 +1,4 @@
-package com.cool.tu.manager.upload;
+package com.cool.tu.manager.picture.upload;
 
 /**
  * @Author Cool
@@ -13,8 +13,8 @@ import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
-import com.cool.tu.manager.CosClientConfig;
-import com.cool.tu.manager.CosManager;
+import com.cool.tu.manager.picture.CosClientConfig;
+import com.cool.tu.manager.picture.CosManager;
 import com.cool.tu.model.dto.file.UploadPictureResult;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.model.ciModel.persistence.CIObject;

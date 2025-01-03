@@ -35,6 +35,14 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
     private SpaceService spaceService;
     @Resource
     private PictureService pictureService;
+
+    /**
+     * 获取空间的使用状态
+     *
+     * @param spaceUsageAnalyzeRequest 空间资源使用分析请求封装类
+     * @param loginUser                当前登录用户
+     * @return 空间资源使用分析响应封装类
+     */
     @Override
     public SpaceUsageAnalyzeResponse getSpaceUsageAnalyze(SpaceUsageAnalyzeRequest spaceUsageAnalyzeRequest, User loginUser) {
         // 校验参数
@@ -83,6 +91,14 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
             return spaceUsageAnalyzeResponse;
         }
     }
+
+    /**
+     * 获取空间图片分类分析
+     *
+     * @param spaceCategoryAnalyzeRequest    空间图片分类分析请求封装类
+     * @param loginUser                      当前登录用户
+     * @return  空间图片分类分析响应封装类
+     */
     @Override
     public List<SpaceCategoryAnalyzeResponse> getSpaceCategoryAnalyze(SpaceCategoryAnalyzeRequest spaceCategoryAnalyzeRequest, User loginUser) {
         ThrowUtils.throwIf(spaceCategoryAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
@@ -105,6 +121,14 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 })
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 获取空间图片标签分析
+     *
+     * @param spaceTagAnalyzeRequest    空间图片标签分析请求封装类
+     * @param loginUser                 当前登录用户
+     * @return  空间图片标签分析响应封装类
+     */
     @Override
     public List<SpaceTagAnalyzeResponse> getSpaceTagAnalyze(SpaceTagAnalyzeRequest spaceTagAnalyzeRequest, User loginUser) {
         ThrowUtils.throwIf(spaceTagAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
@@ -131,6 +155,14 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 .map(entry -> new SpaceTagAnalyzeResponse(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 获取空间图片大小分析
+     *
+     * @param spaceSizeAnalyzeRequest   空间图片大小分析请求封装类
+     * @param loginUser                 当前登录用户
+     * @return  空间图片大小分析响应封装类
+     */
     @Override
     public List<SpaceSizeAnalyzeResponse> getSpaceSizeAnalyze(SpaceSizeAnalyzeRequest spaceSizeAnalyzeRequest, User loginUser) {
         ThrowUtils.throwIf(spaceSizeAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
@@ -158,6 +190,14 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 .map(entry -> new SpaceSizeAnalyzeResponse(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 获取空间用户上传行为分析
+     *
+     * @param spaceUserAnalyzeRequest   空间用户上传行为分析请求封装类
+     * @param loginUser                 当前登录用户
+     * @return  空间用户上传行为分析响应封装类
+     */
     @Override
     public List<SpaceUserAnalyzeResponse> getSpaceUserAnalyze(SpaceUserAnalyzeRequest spaceUserAnalyzeRequest, User loginUser) {
         ThrowUtils.throwIf(spaceUserAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
@@ -197,6 +237,14 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 })
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 空间使用排行分析（仅管理员）
+     *
+     * @param spaceRankAnalyzeRequest   空间使用排行分析请求封装类
+     * @param loginUser                 当前登录用户
+     * @return  空间使用排行分析响应封装类
+     */
     @Override
     public List<Space> getSpaceRankAnalyze(SpaceRankAnalyzeRequest spaceRankAnalyzeRequest, User loginUser) {
         ThrowUtils.throwIf(spaceRankAnalyzeRequest == null, ErrorCode.PARAMS_ERROR);
@@ -210,11 +258,12 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
         // 查询并封装结果
         return spaceService.list(queryWrapper);
     }
+
     /**
      * 校验空间分析权限
      *
-     * @param spaceAnalyzeRequest
-     * @param loginUser
+     * @param spaceAnalyzeRequest 空间分析请求封装类
+     * @param loginUser           当前登录用户
      */
     private void checkSpaceAnalyzeAuth(SpaceAnalyzeRequest spaceAnalyzeRequest, User loginUser) {
         boolean queryPublic = spaceAnalyzeRequest.isQueryPublic();
@@ -231,11 +280,12 @@ public class SpaceAnalyzeServiceImpl extends ServiceImpl<SpaceMapper, Space>
             spaceService.checkSpaceAuth(loginUser, space);
         }
     }
+
     /**
      * 根据请求对象封装查询条件
      *
-     * @param spaceAnalyzeRequest
-     * @param queryWrapper
+     * @param spaceAnalyzeRequest 空间分析请求封装类
+     * @param queryWrapper        查询条件
      */
     private void fillAnalyzeQueryWrapper(SpaceAnalyzeRequest spaceAnalyzeRequest, QueryWrapper<Picture> queryWrapper) {
         // 全空间分析

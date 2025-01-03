@@ -1,12 +1,10 @@
 package com.cool.tu.controller;
 
-import com.cool.tu.annotation.AuthCheck;
 import com.cool.tu.common.BaseResponse;
 import com.cool.tu.common.ResultUtils;
-import com.cool.tu.constant.UserConstant;
 import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
-import com.cool.tu.manager.CosManager;
+import com.cool.tu.manager.picture.CosManager;
 import com.qcloud.cos.model.COSObject;
 import com.qcloud.cos.model.COSObjectInputStream;
 import com.qcloud.cos.utils.IOUtils;

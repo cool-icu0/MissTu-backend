@@ -5,7 +5,7 @@ services:
     image: mysql:8.0.40-debian
     container_name: mysql
     environment:
-      MYSQL_DATABASE: codepandora
+      MYSQL_DATABASE: miss_tu
       MYSQL_ROOT_USER: root
       MYSQL_ROOT_PASSWORD: root
     ports:
@@ -22,13 +22,13 @@ services:
     ports:
       - "6379:6379"
 
-  elasticsearch:
-    image: elasticsearch:7.17.23
-    container_name: elasticsearch
-    environment:
-      - discovery.type=single-node
-    ports:
-      - "9200:9200"
-      - "9300:9300"
+#  elasticsearch:
+#    image: elasticsearch:7.17.23
+#    container_name: elasticsearch
+#    environment:
+#      - discovery.type=single-node
+#    ports:
+#      - "9200:9200"
+#      - "9300:9300"
 
 

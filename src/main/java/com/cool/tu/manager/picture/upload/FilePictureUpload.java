@@ -1,4 +1,4 @@
-package com.cool.tu.manager.upload;
+package com.cool.tu.manager.picture.upload;
 
 import cn.hutool.core.io.FileUtil;
 import com.cool.tu.exception.ErrorCode;

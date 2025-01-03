@@ -1,4 +1,4 @@
-package com.cool.tu.manager;
+package com.cool.tu.manager.picture;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;

@@ -31,9 +31,9 @@ public class SpaceAnalyzeController {
     /**
      * 获取空间的使用状态
      *
-     * @param spaceUsageAnalyzeRequest
-     * @param request
-     * @return
+     * @param spaceUsageAnalyzeRequest 空间资源使用分析请求封装类
+     * @param request                  http请求
+     * @return 空间资源使用分析响应封装类
      */
     @PostMapping("/usage")
     public BaseResponse<SpaceUsageAnalyzeResponse> getSpaceUsageAnalyze(
@@ -44,12 +44,13 @@ public class SpaceAnalyzeController {
         SpaceUsageAnalyzeResponse spaceUsageAnalyze = spaceAnalyzeService.getSpaceUsageAnalyze(spaceUsageAnalyzeRequest, loginUser);
         return ResultUtils.success(spaceUsageAnalyze);
     }
+
     /**
      * 获取空间图片分类分析
      *
-     * @param spaceCategoryAnalyzeRequest
-     * @param request
-     * @return
+     * @param spaceCategoryAnalyzeRequest 空间图片分类分析请求封装类
+     * @param request                     http请求
+     * @return  空间图片分类分析响应封装类
      */
     @PostMapping("/category")
     public BaseResponse<List<SpaceCategoryAnalyzeResponse>> getSpaceCategoryAnalyze(
@@ -60,12 +61,13 @@ public class SpaceAnalyzeController {
         List<SpaceCategoryAnalyzeResponse> spaceCategoryAnalyze = spaceAnalyzeService.getSpaceCategoryAnalyze(spaceCategoryAnalyzeRequest, loginUser);
         return ResultUtils.success(spaceCategoryAnalyze);
     }
+
     /**
      * 获取空间图片标签分析
      *
-     * @param spaceTagAnalyzeRequest
-     * @param request
-     * @return
+     * @param spaceTagAnalyzeRequest    空间图片标签分析请求封装类
+     * @param request                http请求
+     * @return  空间图片标签分析响应封装类
      */
     @PostMapping("/tag")
     public BaseResponse<List<SpaceTagAnalyzeResponse>> getSpaceTagAnalyze(
@@ -76,12 +78,13 @@ public class SpaceAnalyzeController {
         List<SpaceTagAnalyzeResponse> spaceTagAnalyze = spaceAnalyzeService.getSpaceTagAnalyze(spaceTagAnalyzeRequest, loginUser);
         return ResultUtils.success(spaceTagAnalyze);
     }
+
     /**
      * 获取空间图片大小分析
      *
-     * @param spaceSizeAnalyzeRequest
-     * @param request
-     * @return
+     * @param spaceSizeAnalyzeRequest 空间图片大小分析请求封装类
+     * @param request                 http请求
+     * @return 空间图片大小分析响应封装类
      */
     @PostMapping("/size")
     public BaseResponse<List<SpaceSizeAnalyzeResponse>> getSpaceSizeAnalyze(@RequestBody SpaceSizeAnalyzeRequest spaceSizeAnalyzeRequest,
@@ -91,12 +94,13 @@ public class SpaceAnalyzeController {
         List<SpaceSizeAnalyzeResponse> resultList = spaceAnalyzeService.getSpaceSizeAnalyze(spaceSizeAnalyzeRequest, loginUser);
         return ResultUtils.success(resultList);
     }
+
     /**
      * 获取空间用户行为分析
      *
-     * @param spaceUserAnalyzeRequest
-     * @param request
-     * @return
+     * @param spaceUserAnalyzeRequest 空间用户行为分析请求封装类
+     * @param request                 http请求
+     * @return  空间用户行为分析响应封装类
      */
     @PostMapping("/user")
     public BaseResponse<List<SpaceUserAnalyzeResponse>> getSpaceUserAnalyze(@RequestBody SpaceUserAnalyzeRequest spaceUserAnalyzeRequest,
@@ -106,12 +110,13 @@ public class SpaceAnalyzeController {
         List<SpaceUserAnalyzeResponse> resultList = spaceAnalyzeService.getSpaceUserAnalyze(spaceUserAnalyzeRequest, loginUser);
         return ResultUtils.success(resultList);
     }
+
     /**
      * 获取空间使用排行分析
      *
-     * @param spaceRankAnalyzeRequest
-     * @param request
-     * @return
+     * @param spaceRankAnalyzeRequest    空间使用排行分析请求封装类
+     * @param request                    http请求
+     * @return  空间使用排行分析响应封装类
      */
     @PostMapping("/rank")
     public BaseResponse<List<Space>> getSpaceRankAnalyze(@RequestBody SpaceRankAnalyzeRequest spaceRankAnalyzeRequest,

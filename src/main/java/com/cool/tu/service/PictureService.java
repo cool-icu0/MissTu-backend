@@ -118,14 +118,6 @@ public interface PictureService extends IService<Picture> {
     void editPicture(PictureEditRequest pictureEditRequest, User loginUser);
 
     /**
-     * 校验空间图片的权限
-     *
-     * @param loginUser 登录用户
-     * @param picture   图片
-     */
-    void checkPictureAuth(User loginUser, Picture picture);
-
-    /**
      * 更新图片
      *
      * @param pictureUpdateRequest 图片更新请求

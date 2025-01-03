@@ -1,6 +1,5 @@
 package com.cool.tu.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -16,11 +15,14 @@ import com.cool.tu.api.aliyunAI.model.GetOutPaintingTaskResponse;
 import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
 import com.cool.tu.exception.ThrowUtils;
-import com.cool.tu.manager.CacheManager;
-import com.cool.tu.manager.CosManager;
-import com.cool.tu.manager.upload.FilePictureUpload;
-import com.cool.tu.manager.upload.PictureUploadTemplate;
-import com.cool.tu.manager.upload.UrlPictureUpload;
+import com.cool.tu.manager.auth.SpaceUserAuthManager;
+import com.cool.tu.manager.auth.constant.SpaceUserPermissionConstant;
+import com.cool.tu.manager.auth.constant.StpKit;
+import com.cool.tu.manager.picture.CacheManager;
+import com.cool.tu.manager.picture.CosManager;
+import com.cool.tu.manager.picture.upload.FilePictureUpload;
+import com.cool.tu.manager.picture.upload.PictureUploadTemplate;
+import com.cool.tu.manager.picture.upload.UrlPictureUpload;
 import com.cool.tu.model.dto.file.UploadPictureResult;
 import com.cool.tu.model.dto.picture.*;
 import com.cool.tu.model.entity.Picture;
@@ -42,6 +44,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.scheduling.annotation.Async;
@@ -96,6 +99,8 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
     @Resource
     private AliYunAiApi aliYunAiApi;
+    @Autowired
+    private SpaceUserAuthManager spaceUserAuthManager;
 
     /**
      * 上传图片
@@ -314,12 +319,18 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 查询数据库
         Picture picture = getById(id);
         ThrowUtils.throwIf(picture == null, ErrorCode.NOT_FOUND_ERROR);
-        // 空间权限校验
+        //空间的图片，需要校验权限
+        Space space = null;
         Long spaceId = picture.getSpaceId();
+        //todo 所有的hasPermission都需要修改
         if (spaceId != null) {
-            User loginUser = userService.getLoginUser(request);
-            checkPictureAuth(loginUser, picture);
+            boolean hasPermission = StpKit.SPACE.hasPermission(SpaceUserPermissionConstant.PICTURE_VIEW);
+            ThrowUtils.throwIf(!hasPermission, ErrorCode.NO_AUTH_ERROR);
+            space = spaceService.getById(spaceId);
+            ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR,"空间不存在");
         }
+        User loginUser = userService.getLoginUser(request);
+        List<String> permissionList = spaceUserAuthManager.getPermissionList(space, loginUser);
         // 对象转封装类
         PictureVO pictureVO = PictureVO.objToVo(picture);
         // 关联查询用户信息
@@ -329,6 +340,7 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
             UserVO userVO = userService.getUserVO(user);
             pictureVO.setUser(userVO);
         }
+        pictureVO.setPermissionList(permissionList);
         return pictureVO;
     }
 
@@ -539,8 +551,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 判断是否存在
         Picture oldPicture = this.getById(pictureId);
         ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
-        // 校验权限
-        checkPictureAuth(loginUser, oldPicture);
         // 开启事务
         transactionTemplate.execute(status -> {
             // 操作数据库
@@ -580,36 +590,11 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         long id = pictureEditRequest.getId();
         Picture oldPicture = this.getById(id);
         ThrowUtils.throwIf(oldPicture == null, ErrorCode.NOT_FOUND_ERROR);
-        // 校验权限
-        checkPictureAuth(loginUser, oldPicture);
         // 补充审核参数
         this.fillReviewParams(picture, loginUser);
         // 操作数据库
         boolean result = this.updateById(picture);
         ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-    }
-
-    /**
-     * 校验图片权限
-     *
-     * @param loginUser 登录用户
-     * @param picture   图片
-     */
-    @Override
-    public void checkPictureAuth(User loginUser, Picture picture) {
-        Long spaceId = picture.getSpaceId();
-        Long loginUserId = loginUser.getId();
-        if (spaceId == null) {
-            // 公共图库，仅本人或管理员可操作
-            if (!picture.getUserId().equals(loginUserId) && !userService.isAdmin(loginUser)) {
-                throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-            }
-        } else {
-            // 私有空间，仅空间管理员可操作
-            if (!picture.getUserId().equals(loginUserId)) {
-                throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
-            }
-        }
     }
 
     /**
@@ -654,12 +639,14 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
         // 空间权限校验
         Long spaceId = pictureQueryRequest.getSpaceId();
+        // 公开图库
         if (spaceId == null) {
-            // 公开图库
             // 普通用户默认只能看到审核通过的数据
             pictureQueryRequest.setReviewStatus(PictureReviewStatusEnum.PASS.getValue());
             pictureQueryRequest.setNullSpaceId(true);
         } else {
+            boolean hasPermission = StpKit.SPACE.hasPermission(SpaceUserPermissionConstant.PICTURE_VIEW);
+            ThrowUtils.throwIf(!hasPermission, ErrorCode.NO_AUTH_ERROR);
             // 私有空间
             User loginUser = userService.getLoginUser(request);
             Space space = spaceService.getById(spaceId);
@@ -668,7 +655,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
                 throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "没有空间权限");
             }
         }
-        // 查询数据库
         // 获取封装类
         return page(new Page<>(current, size), getQueryWrapper(pictureQueryRequest));
     }
@@ -868,8 +854,9 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
 
     /**
      * AI扩图，生成图片
+     *
      * @param createPictureOutPaintingTaskRequest 请求
-     * @param loginUser 登录用户
+     * @param loginUser                           登录用户
      * @return 任务信息
      */
     @Override
@@ -878,8 +865,6 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         Long pictureId = createPictureOutPaintingTaskRequest.getPictureId();
         Picture picture = Optional.ofNullable(this.getById(pictureId))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_ERROR, "图片不存在"));
-        // 校验权限
-        checkPictureAuth(loginUser, picture);
         // 创建扩图任务
         CreateOutPaintingTaskRequest createOutPaintingTaskRequest = new CreateOutPaintingTaskRequest();
         CreateOutPaintingTaskRequest.Input input = new CreateOutPaintingTaskRequest.Input();

@@ -1,4 +1,4 @@
-package com.cool.tu.manager;
+package com.cool.tu.manager.picture;
 
 import cn.hutool.core.io.FileUtil;
 import com.qcloud.cos.COSClient;

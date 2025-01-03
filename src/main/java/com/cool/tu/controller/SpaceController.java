@@ -45,7 +45,7 @@ public class SpaceController {
     private SpaceService spaceService;
 
     /**
-     * 创建空间
+     * 创建空间(私人/团队)
      */
     @PostMapping("/add")
     public BaseResponse<Long> addSpace(@RequestBody SpaceAddRequest spaceAddRequest, HttpServletRequest request) {
@@ -128,7 +128,8 @@ public class SpaceController {
         Space space = spaceService.getById(id);
         ThrowUtils.throwIf(space == null, ErrorCode.NOT_FOUND_ERROR);
         // 获取封装类
-        return ResultUtils.success(spaceService.getSpaceVO(space, request));
+        SpaceVO spaceVO = spaceService.getSpaceVO(space, request);
+        return ResultUtils.success(spaceVO);
     }
 
     /**

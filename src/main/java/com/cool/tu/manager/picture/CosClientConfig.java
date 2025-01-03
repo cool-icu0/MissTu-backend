@@ -1,4 +1,4 @@
-package com.cool.tu.manager;
+package com.cool.tu.manager.picture;
 
 import com.qcloud.cos.COSClient;
 import com.qcloud.cos.ClientConfig;
