@@ -28,7 +28,35 @@ spring:
     host: 127.0.0.1
     port: 6379
     timeout: 5000
-# todo mybatis-plus 配置
+  # 空间图片分表
+  shardingsphere:
+    datasource:
+      names: miss_tu
+      miss_tu:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/miss_tu
+        username: root
+        password: root
+    rules:
+      sharding:
+        tables:
+          picture:
+            actual-data-nodes: miss_tu.picture  # 动态分表
+            table-strategy:
+              standard:
+                sharding-column: spaceId
+                sharding-algorithm-name: picture_sharding_algorithm  # 使用自定义分片算法
+        sharding-algorithms:
+          picture_sharding_algorithm:
+            type: CLASS_BASED
+            props:
+              strategy: standard
+              algorithmClassName: com.cool.tu.manager.sharding.PictureShardingAlgorithm
+    props:
+      sql-show: true
+
+#  mybatis-plus 配置
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
@@ -40,7 +68,7 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值（默认为 1）
       logic-not-delete-value: 0 # 逻辑未删除值（默认为 0）
 
-# todo 接口文档配置
+# 接口文档配置
 knife4j:
   enable: true
   openapi:
