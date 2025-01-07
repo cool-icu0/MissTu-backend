@@ -80,3 +80,13 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.cool.tu.controller
+cos:
+  client:
+    host: xxxxxxxxxxxxxxx
+    secretId: xxxxxxxxxxxxxxxxxxxxxx
+    secretKey: xxxxxxxxxxxxxxxxxxxx
+    region: xxxxxxxxxxxxxx
+    bucket: xxxxxxxxxxxxx
+# 阿里云 AI 配置
+aliYunAi:
+  apiKey: xxxxxxxxxxxxxxxxxxxxxxxxxxxx
