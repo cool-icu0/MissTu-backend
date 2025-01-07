@@ -1,4 +1,4 @@
-package com.cool.tu.manager.auth.constant;
+package com.cool.tu.manager.auth.model.constant;
 
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;

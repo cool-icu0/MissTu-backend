@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.cool.tu.constant.UserConstant;
 import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
-import com.cool.tu.manager.auth.constant.StpKit;
+import com.cool.tu.manager.auth.model.constant.StpKit;
 import com.cool.tu.model.dto.user.UserQueryRequest;
 import com.cool.tu.model.entity.User;
 import com.cool.tu.model.enums.UserRoleEnum;
@@ -175,6 +175,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.OPERATION_ERROR, "未登录");
         }
         // 移除登录态
+        StpKit.SPACE.logout();
+        StpKit.SPACE.deleteTokenSession(UserConstant.USER_LOGIN_STATE);
         request.getSession().removeAttribute(UserConstant.USER_LOGIN_STATE);
         return true;
     }

@@ -1,4 +1,4 @@
-package com.cool.tu.manager.auth.constant;
+package com.cool.tu.manager.auth.model.constant;
 
 public interface SpaceUserPermissionConstant {
     /**

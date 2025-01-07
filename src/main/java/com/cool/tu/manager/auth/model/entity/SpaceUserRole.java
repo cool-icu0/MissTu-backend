@@ -1,27 +1,32 @@
-package com.cool.tu.manager.auth.model;
+package com.cool.tu.manager.auth.model.entity;
 
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
-public class SpaceUserPermission implements Serializable {
+public class SpaceUserRole implements Serializable {
   
     /**  
-     * 权限键  
+     * 角色键  
      */  
     private String key;  
   
     /**  
-     * 权限名称  
+     * 角色名称  
      */  
     private String name;  
   
     /**  
-     * 权限描述  
+     * 权限键列表  
+     */  
+    private List<String> permissions;
+  
+    /**  
+     * 角色描述  
      */  
     private String description;  
   
     private static final long serialVersionUID = 1L;  
-  
 }

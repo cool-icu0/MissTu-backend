@@ -8,7 +8,7 @@ import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
 import com.cool.tu.exception.ThrowUtils;
 import com.cool.tu.manager.auth.annotation.SaSpaceCheckPermission;
-import com.cool.tu.manager.auth.constant.SpaceUserPermissionConstant;
+import com.cool.tu.manager.auth.model.constant.SpaceUserPermissionConstant;
 import com.cool.tu.model.dto.spaceuser.SpaceUserAddRequest;
 import com.cool.tu.model.dto.spaceuser.SpaceUserEditRequest;
 import com.cool.tu.model.dto.spaceuser.SpaceUserQueryRequest;

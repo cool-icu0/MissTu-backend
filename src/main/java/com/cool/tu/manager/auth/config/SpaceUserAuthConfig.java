@@ -1,5 +1,7 @@
-package com.cool.tu.manager.auth.model;
+package com.cool.tu.manager.auth.config;
 
+import com.cool.tu.manager.auth.model.entity.SpaceUserPermission;
+import com.cool.tu.manager.auth.model.entity.SpaceUserRole;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -16,7 +18,7 @@ public class SpaceUserAuthConfig implements Serializable {
     /**  
      * 角色列表  
      */  
-    private List<SpaceUserRole> roles;  
+    private List<SpaceUserRole> roles;
   
     private static final long serialVersionUID = 1L;  
 }

@@ -10,6 +10,7 @@ import com.cool.tu.exception.BusinessException;
 import com.cool.tu.exception.ErrorCode;
 import com.cool.tu.exception.ThrowUtils;
 import com.cool.tu.manager.auth.SpaceUserAuthManager;
+import com.cool.tu.manager.sharding.DynamicShardingManager;
 import com.cool.tu.mapper.SpaceUserMapper;
 import com.cool.tu.model.dto.space.SpaceAddRequest;
 import com.cool.tu.model.dto.space.SpaceQueryRequest;
@@ -59,6 +60,11 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
 
     @Resource
     private SpaceUserAuthManager spaceUserAuthManager;
+
+        // 为了方便部署，注释掉分表
+//    @Resource
+//    @Lazy
+//    private DynamicShardingManager dynamicShardingManager;
 
 
     /**
@@ -140,6 +146,7 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
         if (spaceAddRequest.getSpaceType() == null) {
             spaceAddRequest.setSpaceType(SpaceTypeEnum.PRIVATE.getValue());
         }
+
         //在此处将实体类和 DTO 进行转换
         Space space = new Space();
         BeanUtils.copyProperties(spaceAddRequest, space);
@@ -153,7 +160,7 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
         if (SpaceLevelEnum.COMMON.getValue() != spaceAddRequest.getSpaceLevel() && !userService.isAdmin(loginUser)) {
             throw new BusinessException(ErrorCode.NO_AUTH_ERROR, "无权限创建指定级别的空间");
         }
-        // 针对用户进行加锁
+        // 控制同一用户只能创建一个私有空间、以及一个团队空间
         String lock = String.valueOf(userId).intern();
         synchronized (lock) {
             Long newSpaceId = transactionTemplate.execute(status -> {
@@ -166,9 +173,9 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                 }
                 // 写入数据库
                 boolean result = this.save(space);
-                ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR);
-                // 如果是团队空间，关联新增团队成员记录
-                if (SpaceTypeEnum.TEAM.getValue() == spaceAddRequest.getSpaceType()) {
+                ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "保存空间到数据库失败");
+                // 创建成功后，如果是团队空间，关联新增团队成员记录
+                if (SpaceTypeEnum.TEAM.getValue() == space.getSpaceType()) {
                     SpaceUser spaceUser = new SpaceUser();
                     spaceUser.setSpaceId(space.getId());
                     spaceUser.setUserId(userId);
@@ -176,6 +183,8 @@ public class SpaceServiceImpl extends ServiceImpl<SpaceMapper, Space>
                     result = spaceUserService.save(spaceUser);
                     ThrowUtils.throwIf(!result, ErrorCode.OPERATION_ERROR, "创建团队成员记录失败");
                 }
+                // 创建分表（仅对团队空间生效）为方便部署，暂时不使用
+//                dynamicShardingManager.createSpacePictureTable(space);
                 // 返回新写入的数据 id
                 return space.getId();
             });

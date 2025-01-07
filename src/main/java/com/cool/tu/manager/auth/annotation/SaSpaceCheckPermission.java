@@ -3,7 +3,7 @@ package com.cool.tu.manager.auth.annotation;
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.annotation.SaMode;
 import cn.hutool.core.annotation.AliasFor;
-import com.cool.tu.manager.auth.constant.StpKit;
+import com.cool.tu.manager.auth.model.constant.StpKit;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
