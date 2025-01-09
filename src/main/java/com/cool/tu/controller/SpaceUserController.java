@@ -17,6 +17,7 @@ import com.cool.tu.model.entity.User;
 import com.cool.tu.model.vo.spaceuser.SpaceUserVO;
 import com.cool.tu.service.SpaceUserService;
 import com.cool.tu.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
+@Api(tags = "空间成员接口")
 @RequestMapping("/spaceUser")
 @Slf4j
 public class SpaceUserController {  

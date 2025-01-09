@@ -24,8 +24,8 @@ import com.cool.tu.model.vo.picture.PictureTagCategory;
 import com.cool.tu.model.vo.picture.PictureVO;
 import com.cool.tu.service.PictureService;
 import com.cool.tu.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,6 +38,7 @@ import java.util.List;
  * @Date 2024/12/17 下午3:17
  */
 @RestController
+@Api(tags="图片接口")
 @RequestMapping("/picture")
 @Slf4j
 public class PictureController {
@@ -47,7 +48,7 @@ public class PictureController {
 
     @Resource
     private UserService userService;
-    @Autowired
+    @Resource
     private AliYunAiApi aliYunAiApi;
 
     /**
@@ -158,6 +159,16 @@ public class PictureController {
         // 获取封装类
         Page<PictureVO> pictureVOPage = pictureService.getPictureVOPage(picturePage, request);
         return ResultUtils.success(pictureVOPage);
+    }
+    /**
+     * 分页获取公开图片列表（封装类）
+     */
+    @PostMapping("/list/page/vo/public")
+    public BaseResponse<Page<PictureVO>> listPublicPictureVOByPage(@RequestBody PictureQueryRequest pictureQueryRequest, HttpServletRequest request) {
+        Page<Picture> picturePage = pictureService.listPublicPictureVOByPage(pictureQueryRequest, request);
+        // 获取封装类
+        Page<PictureVO> publicPictureVOPage = pictureService.getPictureVOPage(picturePage, request);
+        return ResultUtils.success(publicPictureVOPage);
     }
 
     @Deprecated

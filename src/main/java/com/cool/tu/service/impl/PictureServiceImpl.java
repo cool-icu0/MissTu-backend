@@ -634,6 +634,30 @@ public class PictureServiceImpl extends ServiceImpl<PictureMapper, Picture>
         // 空间权限校验
         Long spaceId = pictureQueryRequest.getSpaceId();
         // 公开图库
+        if (spaceId != null) {
+            boolean hasPermission = StpKit.SPACE.hasPermission(SpaceUserPermissionConstant.PICTURE_VIEW);
+            ThrowUtils.throwIf(!hasPermission, ErrorCode.NO_AUTH_ERROR);
+        }
+        // 获取封装类
+        return page(new Page<>(current, size), getQueryWrapper(pictureQueryRequest));
+    }
+
+    /**
+     * 分页获取公开图片（封装类）
+     *
+     * @param pictureQueryRequest 查询请求
+     * @param request             请求
+     * @return 分页图片
+     */
+    @Override
+    public Page<Picture> listPublicPictureVOByPage(PictureQueryRequest pictureQueryRequest, HttpServletRequest request) {
+        long current = pictureQueryRequest.getCurrent();
+        long size = pictureQueryRequest.getPageSize();
+        // 限制爬虫
+        ThrowUtils.throwIf(size > 20, ErrorCode.PARAMS_ERROR);
+        // 空间权限校验
+        Long spaceId = pictureQueryRequest.getSpaceId();
+        // 公开图库
         if (spaceId == null) {
             // 普通用户默认只能看到审核通过的数据
             pictureQueryRequest.setReviewStatus(PictureReviewStatusEnum.PASS.getValue());

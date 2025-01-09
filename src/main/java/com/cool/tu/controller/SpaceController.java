@@ -23,6 +23,7 @@ import com.cool.tu.model.vo.space.SpaceVO;
 import com.cool.tu.model.vo.spaceuser.SpaceUserVO;
 import com.cool.tu.service.SpaceService;
 import com.cool.tu.service.UserService;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -40,6 +41,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RestController
+@Api(tags = "空间接口")
 @RequestMapping("/space")
 public class SpaceController {
     @Resource

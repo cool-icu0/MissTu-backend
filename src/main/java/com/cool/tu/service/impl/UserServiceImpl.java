@@ -11,6 +11,7 @@ import com.cool.tu.exception.ErrorCode;
 import com.cool.tu.manager.auth.model.constant.StpKit;
 import com.cool.tu.model.dto.user.UserQueryRequest;
 import com.cool.tu.model.entity.User;
+import com.cool.tu.model.enums.AvatarEnum;
 import com.cool.tu.model.enums.UserRoleEnum;
 import com.cool.tu.model.vo.user.LoginUserVO;
 import com.cool.tu.model.vo.user.UserVO;
@@ -51,11 +52,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
         }
         // 从数据库查询（追求性能的话可以注释，直接返回上述结果）
-        long userId = currentUser.getId();
-        currentUser = this.getById(userId);
-        if (currentUser == null) {
-            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
-        }
+        // long userId = currentUser.getId();
+        // currentUser = this.getById(userId);
+        // if (currentUser == null) {
+        //     throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        // }
         return currentUser;
     }
 
@@ -152,8 +153,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = new User();
         user.setUserAccount(userAccount);
         user.setUserPassword(encryptPassword);
-        user.setUserName("无名");
+        //随机取个名字
+        user.setUserName( "用户" + (int)(Math.random()*1000*1000));
         user.setUserRole(UserRoleEnum.USER.getValue());
+        //随机从AvatarEnum中获取一个头像
+        user.setUserAvatar(AvatarEnum.getRandomAvatar());
         boolean saveResult = this.save(user);
         if (!saveResult) {
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "注册失败，数据库错误");

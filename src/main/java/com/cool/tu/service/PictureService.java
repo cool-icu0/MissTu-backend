@@ -185,5 +185,13 @@ public interface PictureService extends IService<Picture> {
      * @return 任务响应
      */
     GetOutPaintingTaskResponse getPictureOutPaintingTask(String taskId);
+    /**
+     * 分页获取公开图片（封装类）
+     *
+     * @param pictureQueryRequest 图片查询请求
+     * @param request             请求
+     * @return 图片分页
+     */
+    Page<Picture> listPublicPictureVOByPage(PictureQueryRequest pictureQueryRequest, HttpServletRequest request);
 }
 

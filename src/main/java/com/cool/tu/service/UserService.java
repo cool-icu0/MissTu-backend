@@ -1,19 +1,14 @@
 package com.cool.tu.service;
 
-import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.cool.tu.model.dto.user.UserQueryRequest;
 import com.cool.tu.model.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.cool.tu.model.vo.user.LoginUserVO;
 import com.cool.tu.model.vo.user.UserVO;
-import org.springframework.beans.BeanUtils;
-import org.springframework.util.DigestUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author Cool

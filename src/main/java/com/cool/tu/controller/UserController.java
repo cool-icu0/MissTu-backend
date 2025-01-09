@@ -14,6 +14,7 @@ import com.cool.tu.model.entity.User;
 import com.cool.tu.model.vo.user.LoginUserVO;
 import com.cool.tu.model.vo.user.UserVO;
 import com.cool.tu.service.UserService;
+import io.swagger.annotations.Api;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +28,7 @@ import java.util.List;
  */
 
 @RestController
+@Api(tags = "用户接口")
 @RequestMapping("/user")
 public class UserController {
 
