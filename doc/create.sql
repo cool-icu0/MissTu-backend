@@ -93,3 +93,16 @@ create table if not exists space_user
     INDEX idx_spaceId (spaceId),                    -- 提升按空间查询的性能
     INDEX idx_userId (userId)                       -- 提升按用户查询的性能
 ) comment '空间用户关联' collate = utf8mb4_unicode_ci;
+
+use miss_tu;
+CREATE TABLE user_log
+(
+    id          bigint auto_increment primary key comment 'id',
+    userId      bigint       not null comment '用户 id',
+    action      varchar(255) not null comment '操作',
+    description varchar(255) not null comment '描述',
+    createTime  datetime     default CURRENT_TIMESTAMP not null comment '创建时间',
+    unique key uk_userId_createTime (userId, createTime),
+    index idx_createTime (createTime),
+    index idx_userId (userId)
+) comment '用户日志';
